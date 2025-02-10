@@ -2,6 +2,7 @@ using Data.Context;
 using Data.Repository;
 using Microondas.API.Interfaces;
 using Microondas.API.Service;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 public partial class Program
@@ -10,7 +11,12 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddDbContext<MicrowaveContext>();
+        builder.Services.AddDbContext<MicrowaveContext>((options) => {
+            options
+                    .UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
+                    .UseLazyLoadingProxies();
+        });
+        builder.Services.AddScoped<MicrowaveConfigRepository>();
         builder.Services.AddScoped<ProgramConfigRepository>();
         builder.Services.AddScoped<IProgramConfigService, ProgramConfigService>();
         builder.Services.AddControllers();
