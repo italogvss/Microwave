@@ -16,7 +16,6 @@ public partial class Program
                     .UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
                     .UseLazyLoadingProxies();
         });
-        builder.Services.AddScoped<MicrowaveConfigRepository>();
         builder.Services.AddScoped<ProgramConfigRepository>();
         builder.Services.AddScoped<IProgramConfigService, ProgramConfigService>();
         builder.Services.AddControllers();

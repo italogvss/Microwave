@@ -15,24 +15,10 @@ namespace Data.Context
        
 
         public DbSet<ProgramConfig> ProgramConfigs { get; set; }
-        public DbSet<MicrowaveConfig> MicrowaveConfigs { get; set; }
 
         public MicrowaveContext(DbContextOptions<MicrowaveContext> options) : base(options)
         {
            
-        }
-
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            // Configura a relação entre MicrowaveConfig e ProgramConfig (1:1)
-            modelBuilder.Entity<MicrowaveConfig>()
-        .HasOne(m => m.Program)  // Relaciona MicrowaveConfig com ProgramConfig
-        .WithMany()  // ProgramConfig não precisa ter uma referência de volta
-        .HasForeignKey(m => m.ProgramId) // Chave estrangeira de MicrowaveConfig
-        .OnDelete(DeleteBehavior.SetNull); // Quando o ProgramConfig for removido, não exclui o MicrowaveConfig, mas apenas define como nulo o Program.
         }
 
         public void InitializeDatabase()

@@ -41,6 +41,13 @@ namespace Shared.Data.Migrations
                     b.HasIndex("ProgramId");
 
                     b.ToTable("MicrowaveConfigs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            State = "Idle"
+                        });
                 });
 
             modelBuilder.Entity("Shared.Models.Model.ProgramConfig", b =>
