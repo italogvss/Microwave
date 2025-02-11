@@ -1,12 +1,14 @@
-﻿using Shared.Models.Model;
+﻿using Shared.Models.DTO.Request;
+using Shared.Models.DTO.Response;
+using Shared.Models.Model;
 
 namespace Microondas.API.Interfaces
 {
     public interface IProgramConfigService
     {
-        Task<IEnumerable<ProgramConfig>> GetAllAsync();
-        Task AddAsync(ProgramConfig programConfig);
-        Task UpdateAsync(ProgramConfig programConfig);
+        Task<IEnumerable<ProgramConfigResponseDTO>> GetAllAsync();
+        Task AddAsync(ProgramConfigRequestDTO programConfigDto);
+        Task UpdateAsync(ProgramConfigRequestDTO programConfigDto);
         Task DeleteAsync(int id);
     }
 }

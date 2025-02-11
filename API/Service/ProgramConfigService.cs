@@ -2,6 +2,9 @@
 using Microondas.API.Exeptions;
 using Microondas.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Shared.Models.DTO.Request;
+using Shared.Models.DTO.Response;
+using Shared.Models.Mappers;
 using Shared.Models.Model;
 
 namespace Microondas.API.Service
@@ -15,31 +18,34 @@ namespace Microondas.API.Service
             _programConfigRepository = programConfigRepository;
         }
 
-        public async Task<IEnumerable<ProgramConfig>> GetAllAsync()
+        public async Task<IEnumerable<ProgramConfigResponseDTO>> GetAllAsync()
         {
-            return await _programConfigRepository.GetAllAsync();
+            var entities = await _programConfigRepository.GetAllAsync();
+            return ProgramConfigMapper.ToDtoList(entities);
         } 
 
-        public async Task AddAsync(ProgramConfig programConfig)
+        public async Task AddAsync(ProgramConfigRequestDTO programConfigDto)
         {
             var programsList = await _programConfigRepository.GetAllAsync();
-            if (programsList.Any(p => p.Str == programConfig.Str))
+
+            if (programsList.Any(p => p.Str == programConfigDto.Str))
             {
                 throw new DuplicateEntryException("String already exist");
             }
-            await _programConfigRepository.AddAsync(programConfig);
+            var entity = ProgramConfigMapper.ToModel(programConfigDto);
+            await _programConfigRepository.AddAsync(entity);
         }
 
-        public async Task UpdateAsync(ProgramConfig programConfig)
+        public async Task UpdateAsync(ProgramConfigRequestDTO programConfigDto)
         {
-            var existingProgram = await _programConfigRepository.GetByIdAsync((int)programConfig.Id);
+            var existingProgram = await _programConfigRepository.GetByIdAsync((int)programConfigDto.Id);
 
             if (existingProgram == null)
             {
                 throw new NotFoundException("Program not found");
             }
 
-            bool hasDuplicate = await _programConfigRepository.AnyAsync(p => p.Str == programConfig.Str && p.Id != programConfig.Id);
+            bool hasDuplicate = await _programConfigRepository.AnyAsync(p => p.Str == programConfigDto.Str && p.Id != programConfigDto.Id);
 
             if (hasDuplicate)
             {
@@ -48,12 +54,12 @@ namespace Microondas.API.Service
 
             // Atualiza os valores do objeto existente
             existingProgram.Update(
-                programConfig.Name,
-                programConfig.Food,
-                programConfig.Time,
-                programConfig.Power,
-                programConfig.Str,
-                programConfig.Instructions
+                programConfigDto.Name,
+                programConfigDto.Food,
+                programConfigDto.Time,
+                programConfigDto.Power,
+                programConfigDto.Str,
+                programConfigDto.Instructions
                 );
 
             await _programConfigRepository.UpdateAsync(existingProgram);

@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	 <PackageReference Include="Microsoft.AspnetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -28,6 +29,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared.Models\Shared.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\defaultPrograms.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

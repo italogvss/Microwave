@@ -1,8 +1,12 @@
+using API.Security.YourNamespace.Services;
 using Data.Context;
 using Data.Repository;
 using Microondas.API.Interfaces;
 using Microondas.API.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 
 public partial class Program
@@ -18,12 +22,30 @@ public partial class Program
         });
         builder.Services.AddScoped<ProgramConfigRepository>();
         builder.Services.AddScoped<IProgramConfigService, ProgramConfigService>();
-        builder.Services.AddControllers();
+        builder.Services.AddScoped<AuthService>();
+        builder.Services.AddControllers().AddDataAnnotationsLocalization();
         builder.Services.AddSwaggerGen();
         builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]);
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+            });
 
         builder.Services.AddCors();
-
+        builder.Services.AddAuthorization();
         var app = builder.Build();
         using (var scope = app.Services.CreateScope())
         {
@@ -37,10 +59,21 @@ public partial class Program
             .AllowAnyHeader();
 
         });
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        if (app.Environment.IsDevelopment())
+        {
+            // Habilita o Swagger na aplicação
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                // Definindo a página inicial do Swagger
+                options.RoutePrefix = string.Empty;  // Define o Swagger como a página inicial
+            });
+        }
         app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.MapControllers();
+
         app.Run();
     } 
 }

@@ -29,7 +29,6 @@ namespace Shared.Models.Model
             IsDefault = isDefault;
         }
 
-        // Método para atualizar valores, caso necessário
         public void Update(string name, string food, int time, int power, string str, string? instructions)
         {
             Name = name;

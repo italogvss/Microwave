@@ -1,12 +1,15 @@
 ﻿using Data.Context;
 using Microondas.API.Exeptions;
 using Microondas.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models.DTO.Request;
 using Shared.Models.Model;
 
 namespace Microondas.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ProgramConfigController : ControllerBase
     {
@@ -37,7 +40,7 @@ namespace Microondas.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ProgramConfig programConfig)
+        public async Task<IActionResult> Post([FromBody] ProgramConfigRequestDTO programConfig)
         {
             if (programConfig == null)
             {
@@ -57,7 +60,7 @@ namespace Microondas.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] ProgramConfig programConfig)
+        public async Task<IActionResult> Put(int id, [FromBody] ProgramConfigRequestDTO programConfig)
         {
             if (id != programConfig.Id)
             {
