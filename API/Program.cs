@@ -59,16 +59,10 @@ public partial class Program
             .AllowAnyHeader();
 
         });
-        if (app.Environment.IsDevelopment())
-        {
             // Habilita o Swagger na aplicação
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                // Definindo a página inicial do Swagger
-                options.RoutePrefix = string.Empty;  // Define o Swagger como a página inicial
-            });
-        }
+            app.UseSwaggerUI();
+        
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();

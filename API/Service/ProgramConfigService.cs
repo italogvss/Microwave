@@ -30,7 +30,7 @@ namespace Microondas.API.Service
 
             if (programsList.Any(p => p.Str == programConfigDto.Str))
             {
-                throw new DuplicateEntryException("String already exist");
+                throw new DuplicateEntryException("String já existe");
             }
             var entity = ProgramConfigMapper.ToModel(programConfigDto);
             await _programConfigRepository.AddAsync(entity);
@@ -42,14 +42,14 @@ namespace Microondas.API.Service
 
             if (existingProgram == null)
             {
-                throw new NotFoundException("Program not found");
+                throw new NotFoundException("Programa não encontrado");
             }
 
             bool hasDuplicate = await _programConfigRepository.AnyAsync(p => p.Str == programConfigDto.Str && p.Id != programConfigDto.Id);
 
             if (hasDuplicate)
             {
-                throw new DuplicateEntryException("String already exists");
+                throw new DuplicateEntryException("String já existe");
             }
 
             // Atualiza os valores do objeto existente

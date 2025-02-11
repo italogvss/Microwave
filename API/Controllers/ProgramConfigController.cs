@@ -54,7 +54,7 @@ namespace Microondas.API.Controllers
             catch (Exception ex)
             {
 
-                return Conflict(new { message = ex.Message });
+                return Conflict(ex.Message);
             }            
             
         }
@@ -73,11 +73,11 @@ namespace Microondas.API.Controllers
             }
             catch (DuplicateEntryException ex)
             {
-                return Conflict(new { message = ex.Message });
+                return Conflict(ex.Message);
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new { message = ex.Message });
+                return NotFound(ex.Message);
             }
         }
 

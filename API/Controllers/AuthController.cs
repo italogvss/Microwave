@@ -24,9 +24,9 @@ namespace API.Controllers
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
                 return BadRequest("Username e senha são obrigatórios");
 
-            string token = await _authService.Register(request.Username, request.Password);
+            string token = _authService.Register(request.Username, request.Password);
             if (token == "")
-                return BadRequest("Usuário já existe");
+                return Conflict("Usuário já existe");
 
             return Ok(new AuthResponseDTO(request.Username, token));
         }
