@@ -13,7 +13,7 @@ O frontend é uma aplicação React + TypeScript, que se comunica com a API e é
 - SQL Server → Banco de dados
 
 ## Inicialização
-No diretorio da solução, verifique se há uma build do front em `Web/wwwroot` caso não, faça a build de um do repositorio [Microwave-Front]([Microwave-Front](https://github.com/italogvss/Microwave-front))
+No diretorio da solução, verifique se há uma build do front em `Web/wwwroot` caso não, faça a build de um do repositorio [Microwave-Front](https://github.com/italogvss/Microwave-front)
 
 Insira a string do banco de dados em `API/appsettings.json`
 
